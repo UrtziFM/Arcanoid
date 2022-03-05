@@ -27,6 +27,24 @@ const user = {
     score: 0
 }
 
+// Create the bricks
+
+let brickRowCount = 3;
+let brickColumnCount = 5;
+let brickWidth = 75;
+let brickHeight = 20;
+let brickPadding = 10;
+let brickOffsetTop = 30;
+let brickOffsetLeft = 30;
+
+let bricks = [];
+for(c=0; c<brickColumnCount; c++) {
+    bricks[c] = [];
+    for(r=0; r<brickRowCount; r++) {
+        bricks[c][r] = { x: 0, y: 0 };
+    }
+}
+
 // Draw circle function to draw ball
 
 function drawCircle(x,y,r,color) {
@@ -75,9 +93,28 @@ function collision(ball, user) {
     return ball.right > user.left && ball.bottom > user.top && ball.left < user.right;
 }
 
+// Draw the bricks (C: Col R: Row )
+function drawBricks() {
+    for(c = 0; c < brickColumnCount; c++) {
+        for(r = 0; r < brickRowCount; r++) {
+            let brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+            let brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+            bricks[c][r].x = brickX;
+            bricks[c][r].y = brickY;
+            ctx.beginPath();
+            ctx.rect(brickX, brickY, brickWidth, brickHeight);
+            ctx.fillStyle = "WHITE";
+            ctx.fill();
+            ctx.closePath();
+        }
+    }
+}
+
 // Render the game function
 
 function render() {
+    // draw the bricks
+    drawBricks();
     // render the canvas
     drawRect(0, 0, cvs.width, cvs.height, "BLACK");
     // render the ball
@@ -124,7 +161,7 @@ function update() {
         let direction = (ball.y + ball.radius < cvs.height/2) ? 1 : -1;
 
         //change velocity X and Y 
-        ball.velocityX = direction * ball.speed * Math.cos(angleRad);
+        ball.velocityX = direction * ball.speed * Math.sin(angleRad);
         ball.velocityY = direction * ball.speed * Math.cos(angleRad);
         // every time the ball hit the paddle increase its speed
         ball.speed += 0.1;
