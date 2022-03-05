@@ -3,6 +3,7 @@ const cvs = document.getElementById("Arcanoid");
 //Using 2d tool for graphics from canvas
 const ctx = cvs.getContext("2d");
 
+
 // Create the  ball
 
 const ball = {
@@ -43,6 +44,14 @@ function drawRect(x,y,w,h,color) {
     ctx.fillRect(x,y,w,h);
 }
 
+// Draw text function
+
+function drawText(text,x,y,color) {
+    ctx.fillStyle = color;
+    ctx.font = "75px fantasy";
+    ctx.fillText(text,x,y);
+}
+
 // control the user paddles
 function movePaddle(evt) {
     let rect = cvs.getBoundingClientRect();
@@ -63,7 +72,7 @@ function collision(ball, user) {
     user.left = user.x;
     user.right = user.x + user.width;
 
-    return ball.right > user.left && ball.bottom > user.top && ball.left < user.right && ball.top < user.bottom;
+    return ball.right > user.left && ball.bottom > user.top && ball.left < user.right;
 }
 
 // Render the game function
@@ -86,8 +95,17 @@ function update() {
 
     // collision with canvas walls
 
-    if(ball.y + ball.radius > cvs.height || ball.y - ball.radius < 0){
+    if(ball.y - ball.radius < 0){ // downside of canvas doesn't have collision wall
         ball.velocityY = -ball.velocityY;
+    } else if(ball.y + ball.radius > cvs.height){
+        // draw Game Over when the ball hit dowside
+        drawText("Game Over",cvs.width/5,cvs.height/5, "WHITE");
+        // Start Button click
+        const reload = document.getElementById('reload');
+
+        reload.addEventListener('click', _ => { 
+        location.reload();
+});
     }
     if(ball.x + ball.radius > cvs.width || ball.x - ball.radius < 0){
         ball.velocityX = -ball.velocityX;
@@ -96,13 +114,13 @@ function update() {
 
     if(collision(ball, user)){
         // where the ball hit the player
-        let collidePoint = ball.y - (user.y + user.height/2);
+        let collidePoint = ball.x - (user.x + user.width/2);
         // normalization 
-        collidePoint = collidePoint/(user.height/2);
+        collidePoint = collidePoint/(user.width/2);
         // calculate angle in Radians 
         let angleRad = collidePoint * (Math.PI/4);
         // X direction of the ball its hit 
-        let direction = (ball.x + ball.radius < cvs.width/2) ? 1 : -1;
+        let direction = (ball.y + ball.radius < cvs.height/2) ? 1 : 1;
 
         //change velocity X and Y 
         ball.velocityX = direction * ball.speed * Math.cos(angleRad);
