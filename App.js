@@ -100,6 +100,7 @@ function update() {
     } else if(ball.y + ball.radius > cvs.height){
         // draw Game Over when the ball hit dowside
         drawText("Game Over",cvs.width/5,cvs.height/5, "WHITE");
+        ball.speed = 0;
         // Start Button click
         const reload = document.getElementById('reload');
 
@@ -119,12 +120,12 @@ function update() {
         collidePoint = collidePoint/(user.width/2);
         // calculate angle in Radians 
         let angleRad = collidePoint * (Math.PI/4);
-        // X direction of the ball its hit 
-        let direction = (ball.y + ball.radius < cvs.height/2) ? 1 : 1;
+        // Y direction of the ball its hit 
+        let direction = (ball.y + ball.radius < cvs.height/2) ? 1 : -1;
 
         //change velocity X and Y 
         ball.velocityX = direction * ball.speed * Math.cos(angleRad);
-        ball.velocityY = direction * ball.speed * Math.sin(angleRad);
+        ball.velocityY = direction * ball.speed * Math.cos(angleRad);
         // every time the ball hit the paddle increase its speed
         ball.speed += 0.1;
     }
