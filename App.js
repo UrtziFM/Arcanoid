@@ -29,15 +29,15 @@ const user = {
 
 // Create the bricks
 
-let brickRowCount = 3;
-let brickColumnCount = 5;
-let brickWidth = 75;
-let brickHeight = 20;
-let brickPadding = 10;
-let brickOffsetTop = 30;
-let brickOffsetLeft = 30;
+var brickRowCount = 4;
+var brickColumnCount = 10;
+var brickWidth = 50;
+var brickHeight = 20;
+var brickPadding = 5;
+var brickOffsetTop = 15;
+var brickOffsetLeft = 25;
 
-let bricks = [];
+var bricks = [];
 for(c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
     for(r=0; r<brickRowCount; r++) {
@@ -80,11 +80,10 @@ cvs.addEventListener("mousemove", movePaddle);
 
 // Draw the bricks (C: Col R: Row )
 function drawBricks() {
-    for(c = 0; c < brickColumnCount; c++) {
-        for(r = 0; r < brickRowCount; r++) {
-            if(bricks[c][r].status == 1){
-            let brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
-            let brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+    for(c=0; c<brickColumnCount; c++) {
+        for(r=0; r<brickRowCount; r++) {
+            var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+            var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
             bricks[c][r].x = brickX;
             bricks[c][r].y = brickY;
             ctx.beginPath();
@@ -92,7 +91,6 @@ function drawBricks() {
             ctx.fillStyle = "WHITE";
             ctx.fill();
             ctx.closePath();
-            }
         }
     }
 }
@@ -117,10 +115,10 @@ function collision(ball, user) {
 // Render the game function
 
 function render() {
-    // draw the bricks
-    drawBricks();
     // render the canvas
     drawRect(0, 0, cvs.width, cvs.height, "BLACK");
+    // draw the bricks
+    drawBricks();
     // render the ball
     drawCircle(ball.x, ball.y, ball.radius, ball.color);
     // draw user's paddle
@@ -140,7 +138,7 @@ function update() {
         ball.velocityY = -ball.velocityY;
     } else if(ball.y + ball.radius > cvs.height){
         // draw Game Over when the ball hit dowside
-        drawText("Game Over",cvs.width/5,cvs.height/5, "WHITE");
+        drawText("Game Over",cvs.width/5,cvs.height/2, "WHITE");
         ball.speed = 0;
         // Start Button click
         const reload = document.getElementById('reload');
