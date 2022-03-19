@@ -41,7 +41,7 @@ let bricks = [];
 for(c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
     for(r=0; r<brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0 };
+        bricks[c][r] = { x: 0, y: 0, status: 1 };
     }
 }
 
@@ -78,25 +78,11 @@ function movePaddle(evt) {
 }
 cvs.addEventListener("mousemove", movePaddle);
 
-// colission detection
-function collision(ball, user) {
-    ball.top = ball.y - ball.radius;
-    ball.bottom = ball.y + ball.radius;
-    ball.right = ball.x + ball.radius;
-    ball.left = ball.x - ball.radius;
-
-    user.top = user.y;
-    user.bottom = user.y + user.height;
-    user.left = user.x;
-    user.right = user.x + user.width;
-
-    return ball.right > user.left && ball.bottom > user.top && ball.left < user.right;
-}
-
 // Draw the bricks (C: Col R: Row )
 function drawBricks() {
     for(c = 0; c < brickColumnCount; c++) {
         for(r = 0; r < brickRowCount; r++) {
+            if(bricks[c][r].status == 1){
             let brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
             let brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
             bricks[c][r].x = brickX;
@@ -106,9 +92,27 @@ function drawBricks() {
             ctx.fillStyle = "WHITE";
             ctx.fill();
             ctx.closePath();
+            }
         }
     }
 }
+
+// colission detection
+function collision(ball, user) {
+                
+    ball.top = ball.y - ball.radius;
+    ball.bottom = ball.y + ball.radius;
+    ball.right = ball.x + ball.radius;
+    ball.left = ball.x - ball.radius;
+
+    user.top = user.y;
+    user.bottom = user.y + user.height;
+    user.left = user.x;
+    user.right = user.x + user.width;
+            
+
+    return ball.right > user.left && ball.bottom > user.top && ball.left < user.right;
+} 
 
 // Render the game function
 
