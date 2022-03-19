@@ -5,7 +5,6 @@ const ctx = cvs.getContext("2d");
 
 
 // Create the  ball
-
 const ball = {
     x: cvs.width/2,
     y: cvs.height/2,
@@ -17,7 +16,6 @@ const ball = {
 }
 
 // Create the user padle
-
 const user = {
     x: (cvs.width - 60)/2, //in the middle of the screen
     y: cvs.height - 30, // on the bottom of the screen
@@ -28,7 +26,6 @@ const user = {
 }
 
 // Create the bricks
-
 var brickRowCount = 4;
 var brickColumnCount = 10;
 var brickWidth = 50;
@@ -36,7 +33,7 @@ var brickHeight = 20;
 var brickPadding = 5;
 var brickOffsetTop = 15;
 var brickOffsetLeft = 25;
-
+// The matrix for bricks
 var bricks = [];
 for(c=0; c<brickColumnCount; c++) {
     bricks[c] = [];
@@ -44,6 +41,8 @@ for(c=0; c<brickColumnCount; c++) {
         bricks[c][r] = { x: 0, y: 0, status: 1 };
     }
 }
+// The Score
+var score = 0;
 
 // Draw circle function to draw ball
 
@@ -82,20 +81,22 @@ cvs.addEventListener("mousemove", movePaddle);
 function drawBricks() {
     for(c=0; c<brickColumnCount; c++) {
         for(r=0; r<brickRowCount; r++) {
-            var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
-            var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
-            bricks[c][r].x = brickX;
-            bricks[c][r].y = brickY;
-            ctx.beginPath();
-            ctx.rect(brickX, brickY, brickWidth, brickHeight);
-            ctx.fillStyle = "WHITE";
-            ctx.fill();
-            ctx.closePath();
+            if(bricks[c][r].status == 1) {
+                var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+                var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+                bricks[c][r].x = brickX;
+                bricks[c][r].y = brickY;
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.fillStyle = "WHITE";
+                ctx.fill();
+                ctx.closePath();
+            }
         }
     }
 }
 
-// colission detection
+// colission with paddle detection
 function collision(ball, user) {
                 
     ball.top = ball.y - ball.radius;
@@ -112,6 +113,32 @@ function collision(ball, user) {
     return ball.right > user.left && ball.bottom > user.top && ball.left < user.right;
 } 
 
+// colission with brick detection
+function collisionDetection() {
+    for(c=0; c<brickColumnCount; c++) {
+        for(r=0; r<brickRowCount; r++) {
+            var b = bricks[c][r];
+            if(b.status == 1){
+                if(ball.x > b.x && ball.x < b.x+brickWidth && ball.y > b.y && ball.y < b.y+brickHeight) {
+                    ball.velocityY = -ball.velocityY;
+                    b.status = 0;
+                    score++;
+                    if(score == brickRowCount*brickColumnCount) {
+                        // draw Game Over when the ball hit dowside
+                        drawText("Congratulations, You Win",cvs.width/5,cvs.height/2, "WHITE");
+                        ball.speed = 0;
+                        // Start Button click
+                        const reload = document.getElementById('reload');
+                        reload.addEventListener('click', _ => { 
+                        location.reload();
+                        });
+                    }        
+                }
+            }
+        }
+    }
+}
+
 // Render the game function
 
 function render() {
@@ -123,6 +150,8 @@ function render() {
     drawCircle(ball.x, ball.y, ball.radius, ball.color);
     // draw user's paddle
     drawRect(user.x, user.y, user.width, user.height, user.color);
+    // collision with bricks
+    collisionDetection();
 }
 
 // update: position, move, ...
@@ -142,7 +171,6 @@ function update() {
         ball.speed = 0;
         // Start Button click
         const reload = document.getElementById('reload');
-
         reload.addEventListener('click', _ => { 
         location.reload();
 });
