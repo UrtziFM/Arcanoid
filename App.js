@@ -26,8 +26,8 @@ const user = {
 }
 
 // Create the bricks
-var brickRowCount = 4;
-var brickColumnCount = 10;
+var brickRowCount = 1;
+var brickColumnCount = 1;
 var brickWidth = 50;
 var brickHeight = 20;
 var brickPadding = 5;
@@ -125,13 +125,7 @@ function collisionDetection() {
                     score++;
                     if(score == brickRowCount*brickColumnCount) {
                         // draw Game Over when the ball hit dowside
-                        drawText("Congratulations, You Win",cvs.width/5,cvs.height/2, "WHITE");
-                        ball.speed = 0;
-                        // Start Button click
-                        const reload = document.getElementById('reload');
-                        reload.addEventListener('click', _ => { 
-                        location.reload();
-                        });
+                        alert("You Win, Congrats!");
                     }        
                 }
             }
