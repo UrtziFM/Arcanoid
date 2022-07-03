@@ -125,10 +125,16 @@ function collisionDetection() {
                     score++;
                     if(score == brickRowCount*brickColumnCount) {
                         // draw Game Over when the ball hit dowside
-                        alert("You Win, Congrats!");
-                        setTimeout(function(){
-                            window.location.reload();
-                         }, 1000);
+                        //alert("You Win, Congrats!");
+                        ball.x = -10;
+                        ball.y = -10;
+                        drawText("You Win!!",cvs.width/5,cvs.height/2, "WHITE");
+                        ball.speed = 0;
+                        // Start Button click
+                        const reload = document.getElementById('reload');
+                        reload.addEventListener('click', _ => { 
+                        location.reload();
+                        });
                     }        
                 }
             }
