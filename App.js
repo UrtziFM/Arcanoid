@@ -126,6 +126,9 @@ function collisionDetection() {
                     if(score == brickRowCount*brickColumnCount) {
                         // draw Game Over when the ball hit dowside
                         alert("You Win, Congrats!");
+                        setTimeout(function(){
+                            window.location.reload();
+                         }, 1000);
                     }        
                 }
             }
