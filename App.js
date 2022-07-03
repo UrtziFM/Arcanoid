@@ -43,6 +43,11 @@ for(c=0; c<brickColumnCount; c++) {
 }
 // The Score
 var score = 0;
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "WHITE";
+    ctx.fillText("Score: "+score, 2, 395);
+}
 
 // Draw circle function to draw ball
 
@@ -152,6 +157,8 @@ function render() {
     drawCircle(ball.x, ball.y, ball.radius, ball.color);
     // draw user's paddle
     drawRect(user.x, user.y, user.width, user.height, user.color);
+    // draw score 
+    drawScore();
     // collision with bricks
     collisionDetection();
 }
